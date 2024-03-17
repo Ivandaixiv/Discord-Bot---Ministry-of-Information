@@ -11,8 +11,9 @@ module.exports = {
             .setRequired(true)),
 	async execute(interaction) {
         await interaction.reply('Receiving message from Super Earth high command...');
-
+        
         const message = interaction.options.getString('message');
+
         try {
             const response = await fetch('http://localhost:8080/chat', {
                 method: 'POST',
@@ -33,11 +34,13 @@ module.exports = {
             const responseData = await response.json();
             const messageContent = responseData.content;
 
-            await interaction.editReply(messageContent);
+            await interaction.editReply(`Your message to the Super Earth communication network: \n"${message}"`);
+            
+            await interaction.followUp(`${messageContent}`);
             // await interaction.editReply(await response.json());
         } catch (error) {
             console.error('Error:', error);
-            await interaction.editReply('Failed to receive message from Super Earth. Please try again later.');
+            await interaction.followUp('Failed to receive message from Super Earth. Please try again later.');
         }
 
         // const responseData = await response.json();
